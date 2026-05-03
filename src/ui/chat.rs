@@ -56,7 +56,7 @@ pub fn draw(frame: &mut Frame, app: &App, color_scheme: &ColorScheme, area: Rect
                 } else {
                     color_scheme.unfocused_window_boarder
                 }))
-                .title("gitez"),
+                .title("Chat"),
         )
         .wrap(Wrap { trim: false });
 

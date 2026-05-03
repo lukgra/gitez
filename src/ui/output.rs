@@ -17,7 +17,7 @@ pub fn draw(frame: &mut Frame, app: &App, color_scheme: &ColorScheme, area: Rect
                 .borders(Borders::ALL)
                 .border_type(BorderType::Rounded)
                 .border_style(Style::default().fg(color_scheme.unfocused_window_boarder))
-                .title("output"),
+                .title("Output"),
         )
         .wrap(Wrap { trim: false });
 

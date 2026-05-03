@@ -15,7 +15,7 @@ pub fn draw(frame: &mut Frame, app: &App, color_scheme: &ColorScheme, area: Rect
             } else {
                 color_scheme.unfocused_window_boarder
             }))
-            .title("prompt (i to type, Enter to send, Esc to cancel, q to quit)"),
+            .title("Prompt (i to type, Enter to send, Esc to cancel, q to quit)"),
     );
 
     frame.render_widget(widget, area);
