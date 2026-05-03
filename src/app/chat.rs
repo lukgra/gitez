@@ -62,4 +62,3 @@ impl Chat {
         self.current_command_index = 0;
     }
 }
-

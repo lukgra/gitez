@@ -42,7 +42,7 @@ impl App {
             chat: Chat::new(),
             output: Output::new(),
             cursor: Cursor::new(),
-            llm_service: llm_service,
+            llm_service,
             tx,
             rx,
         };

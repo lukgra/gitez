@@ -15,4 +15,3 @@ impl Output {
         self.lines.clear();
     }
 }
-
