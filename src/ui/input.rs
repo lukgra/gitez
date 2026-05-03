@@ -1,9 +1,9 @@
 use crate::app::{App, AppMode};
+use crate::ui::ColorScheme;
 use ratatui::{prelude::*, widgets::*};
 
-pub fn draw(frame: &mut Frame, app: &App, area: Rect) {
-    let focused_color = Color::Green;
-    let unfocused_color = Color::White;
+/// Draw input window
+pub fn draw(frame: &mut Frame, app: &App, color_scheme: &ColorScheme, area: Rect) {
     let input_focused = app.mode == AppMode::Input;
 
     let widget = Paragraph::new(app.input.value.as_str()).block(
@@ -11,9 +11,9 @@ pub fn draw(frame: &mut Frame, app: &App, area: Rect) {
             .borders(Borders::ALL)
             .border_type(BorderType::Rounded)
             .border_style(Style::default().fg(if input_focused {
-                focused_color
+                color_scheme.focused_window_boarder
             } else {
-                unfocused_color
+                color_scheme.unfocused_window_boarder
             }))
             .title("prompt (i to type, Enter to send, Esc to cancel, q to quit)"),
     );

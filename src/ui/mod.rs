@@ -8,7 +8,8 @@ use ratatui::prelude::*;
 struct ColorScheme {
     unfocused_window_boarder: Color,
     focused_window_boarder: Color,
-    text: Color,
+    chat_text: Color,
+    output_text: Color,
     command_complete: Color,
     command_failed: Color,
     error: Color,
@@ -19,7 +20,8 @@ impl Default for ColorScheme {
         Self {
             unfocused_window_boarder: Color::Magenta,
             focused_window_boarder: Color::Green,
-            text: Color::White,
+            chat_text: Color::White,
+            output_text: Color::Yellow,
             command_complete: Color::Green,
             command_failed: Color::DarkGray,
             error: Color::Red,
@@ -27,6 +29,7 @@ impl Default for ColorScheme {
     }
 }
 
+/// Draw whole UI
 pub fn draw(frame: &mut Frame, app: &App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
@@ -39,7 +42,7 @@ pub fn draw(frame: &mut Frame, app: &App) {
 
     let color_scheme = ColorScheme::default();
 
-    chat::draw(frame, app, color_scheme, chunks[0]);
-    output::draw(frame, app, chunks[1]);
-    input::draw(frame, app, chunks[2]);
+    chat::draw(frame, app, &color_scheme, chunks[0]);
+    output::draw(frame, app, &color_scheme, chunks[1]);
+    input::draw(frame, app, &color_scheme, chunks[2]);
 }

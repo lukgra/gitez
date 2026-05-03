@@ -1,7 +1,10 @@
 mod app;
-mod ollama;
+mod config;
+mod llm;
 mod ui;
+use llm::{LlmService, Provider};
 
+use anyhow::Result;
 use app::{App, AppMode};
 use crossterm::{
     execute,
@@ -11,14 +14,15 @@ use ratatui::prelude::*;
 use std::io;
 
 #[tokio::main]
-async fn main() -> anyhow::Result<()> {
+async fn main() -> Result<()> {
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
-    let backend = CrosstermBackend::new(stdout);
 
+    let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
-    let mut app = App::new();
+    let llm_service = LlmService::new(Provider::Ollama);
+    let mut app = App::new(llm_service);
 
     while app.mode != AppMode::Exit {
         terminal.draw(|f| ui::draw(f, &app))?;

@@ -3,7 +3,7 @@ use crate::ui::ColorScheme;
 use ratatui::{prelude::*, widgets::*};
 
 /// Draw chat window
-pub fn draw(frame: &mut Frame, app: &App, color_scheme: ColorScheme, area: Rect) {
+pub fn draw(frame: &mut Frame, app: &App, color_scheme: &ColorScheme, area: Rect) {
     let review_focused = app.mode == AppMode::Review;
 
     let all_lines: Vec<Line> = if let Some(error) = &app.chat.error {
@@ -13,7 +13,7 @@ pub fn draw(frame: &mut Frame, app: &App, color_scheme: ColorScheme, area: Rect)
             .chat
             .messages
             .iter()
-            .map(|m| Line::from(m.as_str()).style(Style::default().fg(color_scheme.text)))
+            .map(|m| Line::from(m.as_str()).style(Style::default().fg(color_scheme.chat_text)))
             .collect();
 
         for cmd in &app.chat.executed_commands {

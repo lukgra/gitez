@@ -8,7 +8,7 @@ pub use cursor::Cursor;
 pub use input::Input;
 pub use output::Output;
 
-use crate::ollama;
+use crate::llm::LlmService;
 use crossterm::event::{self, Event, KeyCode, KeyEvent};
 use std::time;
 use tokio::sync::mpsc;
@@ -28,12 +28,13 @@ pub struct App {
     pub input: Input,
     pub output: Output,
     pub cursor: Cursor,
+    pub llm_service: LlmService,
     pub tx: mpsc::Sender<ChatMessage>,
     pub rx: mpsc::Receiver<ChatMessage>,
 }
 
 impl App {
-    pub fn new() -> Self {
+    pub fn new(llm_service: LlmService) -> Self {
         let (tx, rx) = mpsc::channel(32);
         let mut app = Self {
             mode: AppMode::Normal,
@@ -41,6 +42,7 @@ impl App {
             chat: Chat::new(),
             output: Output::new(),
             cursor: Cursor::new(),
+            llm_service: llm_service,
             tx,
             rx,
         };
@@ -142,15 +144,17 @@ impl App {
     fn handle_command_submit(&mut self) {
         let tx = self.tx.clone();
         let cmd = self.input.drain(&mut self.cursor);
+        let llm_service = self.llm_service.clone();
 
-        self.chat.clear();
-        self.output.clear();
-        self.chat.clear_error();
-        self.chat.push(format!("> {}", cmd));
         self.mode = AppMode::Normal;
 
+        self.chat.clear();
+        self.chat.clear_error();
+        self.chat.push(format!("> {}", cmd));
+        self.output.clear();
+
         tokio::spawn(async move {
-            match ollama::ask_ollama(&cmd).await {
+            match llm_service.ask_git(&cmd).await {
                 Ok(response) => {
                     let cmds: Vec<String> = response
                         .lines()
@@ -194,6 +198,7 @@ impl App {
             self.cursor.move_end(self.chat.current_command_value.len());
         } else {
             self.mode = AppMode::Normal;
+
             self.chat.pending_commands.clear();
             self.chat.current_command_value.clear();
             self.cursor.reset();
